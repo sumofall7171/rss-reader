@@ -114,6 +114,9 @@ async function build({ config, feeds, cache, writeCache = false }) {
             const redirect = config.redirects[host];
             if (redirect) item.link = `https://${redirect}${url.pathname}${url.search}`;
           }
+
+          // 5. escape html in titles
+          item.title = escapeHtml(item.title);
         });
 
         // add to allItems
@@ -193,4 +196,13 @@ function readCfg(path) {
   }
 
   return json;
+}
+
+
+function escapeHtml(html) {
+  return html.replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('\'', '&apos;')
+    .replaceAll('"', '&quot;');
 }
